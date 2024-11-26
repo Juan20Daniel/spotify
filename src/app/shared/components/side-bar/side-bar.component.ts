@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.css'
@@ -17,7 +19,7 @@ export class SideBarComponent {
   } = { defaultOptions:[], accessLink:[] }
   customOptions: Array<any> = [];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.mainMenu.defaultOptions = [
@@ -34,7 +36,8 @@ export class SideBarComponent {
       {
         name:'Tu biblioteca',
         icon:'uil uil-chart',
-        router:['/', 'favorites']
+        router:['/', 'favorites'],
+        query: {hola:'pinche puta xd!'}
       }
     ]
     this.mainMenu.accessLink = [
@@ -65,5 +68,14 @@ export class SideBarComponent {
         router:['/']
       }
     ]
+  }
+  goTo($event:any):void {
+    this.router.navigate(['/', 'favorites'], {
+      queryParams: {
+        key1:'value1',
+        key2:'value2'
+      }
+    })
+    console.log($event);
   }
 }
