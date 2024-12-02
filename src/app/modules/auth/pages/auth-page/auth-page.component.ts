@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '@modules/auth/services/auth.service';
 
 @Component({
   selector: 'app-auth-page',
@@ -14,6 +15,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class AuthPageComponent {
   formLogin: FormGroup = new FormGroup({});
+  constructor(private authService:AuthService) {}
   ngOnInit():void {
     this.formLogin = new FormGroup({
       email: new FormControl('',[
@@ -29,7 +31,8 @@ export class AuthPageComponent {
   }
   login():void {
     if(this.formLogin.invalid) return;
-    const body = this.formLogin.value;
-    console.log(body);
+    const {email, password} = this.formLogin.value;
+    this.authService.sendCredentials(email, password);
+    
   }
 }
