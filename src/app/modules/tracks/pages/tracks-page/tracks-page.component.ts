@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SectionGenericComponent } from '@shared/components/section-generic/section-generic.component';
-import * as data from '../../../../data/tracks.json';
 import { TrackModel } from '@core/models/tracks.model';
+import { TrackService } from '../../services/track.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-tracks-page',
   standalone: true,
@@ -14,8 +15,26 @@ import { TrackModel } from '@core/models/tracks.model';
   styleUrl: './tracks-page.component.css'
 })
 export class TracksPageComponent {
-  mockTracksList:Array<TrackModel> = []
+  tracksTranding: Array<TrackModel> =[];
+  tracksRandom:Array<TrackModel> = [];
+  listObservers$:Array<Subscription> = [];
+  constructor(private trackService:TrackService) {}
   ngOnInit():void {
-    this.mockTracksList = data.data;
+    this.loadDataAll();
+    this.loadDataRandom();
+  }
+  loadDataAll():void {
+    this.trackService.getAllTracks$()
+    .subscribe(res => {
+      this.tracksTranding = res;
+    });
+  }
+  loadDataRandom():void {
+    this.trackService.getAllRandom$()
+    .subscribe(res => {
+      this.tracksRandom = res;
+    })
+  }
+  ngOnDestroy():void {
   }
 }

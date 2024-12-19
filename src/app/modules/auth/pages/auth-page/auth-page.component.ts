@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '@modules/auth/services/auth.service';
 
 @Component({
@@ -15,7 +16,7 @@ import { AuthService } from '@modules/auth/services/auth.service';
 })
 export class AuthPageComponent {
   formLogin: FormGroup = new FormGroup({});
-  constructor(private authService:AuthService) {}
+  constructor(private authService:AuthService, private router:Router) {}
   ngOnInit():void {
     this.formLogin = new FormGroup({
       email: new FormControl('',[
@@ -32,7 +33,9 @@ export class AuthPageComponent {
   login():void {
     if(this.formLogin.invalid) return;
     const {email, password} = this.formLogin.value;
-    this.authService.sendCredentials(email, password);
-    
+    this.authService.sendCredentials(email, password)
+    .subscribe(res => {
+      if(res.access) this.router.navigate(['/', 'tracks']);
+    })
   }
 }

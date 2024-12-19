@@ -26,6 +26,5 @@ export class PlayListBodyComponent {
       property,
       order:order==='asc' ? 'desc' : 'asc'
     }
-    console.log(this.optionSort);
   }
 }
